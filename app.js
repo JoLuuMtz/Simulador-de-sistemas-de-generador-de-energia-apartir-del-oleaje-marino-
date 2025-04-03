@@ -23,25 +23,50 @@ const waveSpeed = 0.05;
 const floater = { x: canvas.width / 2, y: canvas.height / 2, width: 40, height: 20, prevY: 0 };
 // Objeto que representa la bobina colocada debajo del flotador
 const coil = { x: floater.x, y: floater.y + 30, width: 10, height: 30 };
+// Objeto que representa la batería
+const battery = { x: canvas.width - 140, y: 340, width: 100, height: 30 };
 
 // Agrega un evento para cambiar la altura de las olas según la posición vertical del mouse
 // Mayor altura cuando el mouse está en la parte inferior de la pantalla
-canvas.addEventListener('mousemove', (event) => {
-    waveHeight = Math.max(10, Math.min(60, event.clientY / 10));
+
+
+
+
+// Evento para iniciar el olaje
+// Botón para detener las olas
+document.getElementById('stopWave').addEventListener('click', () => {
+    isWaveActive = false;
+
+    if(isWaveActive === false) {
+        canvas.removeEventListener('mousemove', (event) => {
+            waveHeight = Math.max(10, Math.min(60, event.clientY / 10));
+        });
+    }
+    waveHeight = 0; // Detiene la ola visualmente
+
+
 
 });
 
-const startWave = document.getElementById("startWave");
-const stopWave = document.getElementById("stopWave");
+// Botón para reanudar las olas
+document.getElementById('startWave').addEventListener('click', () => {
+    isWaveActive = true;
 
-// Evento para iniciar el olaje
+    //
+    if (isWaveActive === true ) {
+        canvas.addEventListener('mousemove', (event) => {
+            waveHeight = Math.max(10, Math.min(60, event.clientY / 10));
+        });
+    } 
+    
+    waveHeight = 30; // Restaura la intensidad predeterminada
+});
+
 
 // Evento para detener el olaje
 
 
 // Modifica la función animate para almacenar el ID de la animación
-
-
 
 
 // Función para dibujar las olas animadas en el canvas
@@ -53,34 +78,198 @@ function drawWave() {
     // Dibuja nubes
     drawClouds();
 
-    // Crea un gradiente lineal vertical para el agua, desde azul medio hasta azul oscuro
-    let gradient = ctx.createLinearGradient(0, canvas.height / 2 - waveHeight, 0, canvas.height);
-    gradient.addColorStop(0, "#1E90FF"); // Azul dodger para la parte superior
-    gradient.addColorStop(1, "#00008B"); // Azul oscuro para la parte inferior
+    // Nivel de agua (línea media con altura variable según las olas)
+    const waterLevel = canvas.height / 2;
+
+    // Dibuja el fondo marino (suelo del mar)
+    drawSeafloor(waterLevel);
+
+    // Crea un gradiente lineal vertical para el agua, colores más realistas
+    let gradient = ctx.createLinearGradient(0, waterLevel - waveHeight, 0, canvas.height);
+    gradient.addColorStop(0, "#0077BE"); // Azul más realista para la superficie
+    gradient.addColorStop(0.3, "#006994"); // Azul medio
+    gradient.addColorStop(0.7, "#004D71"); // Azul más profundo
+    gradient.addColorStop(1, "#00364F"); // Azul muy oscuro para el fondo
+
+
 
     // Comienza a trazar el camino para las olas
     ctx.beginPath();
     // Inicia en el borde izquierdo a la mitad de la altura del canvas
-    ctx.moveTo(0, canvas.height / 2);
+    ctx.moveTo(0, waterLevel);
+
     // Para cada punto horizontal del canvas, calcula la altura de la ola
-    for (let x = 0; x < canvas.width; x++) {
-        // Combina dos ondas sinusoidales de diferentes frecuencias para crear olas más naturales
+    for (let x = 0; x < canvas.width; x += 5) { // Incremento menor para más detalle
+        // Combina tres ondas sinusoidales de diferentes frecuencias para olas más naturales
         let y = waveHeight * Math.sin((x / waveLength) + time) +
             (waveHeight / 2) * Math.sin((x / (waveLength / 2)) + time * 1.5) +
-            (canvas.height / 2);
+            (waveHeight / 4) * Math.sin((x / (waveLength / 4)) + time * 2) +
+            waterLevel;
+
+
+
         // Dibuja línea hasta este punto
         ctx.lineTo(x, y);
     }
+
     // Completa el camino hasta la esquina inferior derecha
     ctx.lineTo(canvas.width, canvas.height);
     // Luego hasta la esquina inferior izquierda
     ctx.lineTo(0, canvas.height);
     // Cierra el camino para formar una forma completa
     ctx.closePath();
+
     // Rellena la forma con el gradiente azul
     ctx.fillStyle = gradient;
     ctx.fill();
+
+    
 }
+
+function drawSeafloor(waterLevel) {
+    // Crea un gradiente para el suelo marino
+    const seafloorGradient = ctx.createLinearGradient(0, waterLevel, 0, canvas.height);
+    seafloorGradient.addColorStop(0, "#5D4037"); // Marrón medio para la parte superior del suelo
+    seafloorGradient.addColorStop(1, "#3E2723"); // Marrón oscuro para la parte más profunda
+
+    // Altura del suelo marino (dejando espacio para el agua)
+    const seafloorHeight = canvas.height - waterLevel - 100;
+    const seafloorY = canvas.height - seafloorHeight;
+
+    // Dibuja el contorno base del fondo marino
+    ctx.beginPath();
+    ctx.moveTo(0, seafloorY);
+
+    // Crea un perfil irregular para el fondo
+    for (let x = 0; x < canvas.width; x += 20) {
+        // Usa una función sinusoidal con ruido para crear variaciones en la altura
+        const variation = 15 * Math.sin(x / 80) + Math.random() * 10 - 5;
+        ctx.lineTo(x, seafloorY + variation);
+    }
+
+    // Completa el camino hasta las esquinas inferiores
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.lineTo(0, canvas.height);
+    ctx.closePath();
+
+    // Rellena con el gradiente
+    ctx.fillStyle = seafloorGradient;
+    ctx.fill();
+
+    // Añade detalles al fondo marino (rocas, algas, etc.)
+    drawSeafloorDetails(seafloorY);
+
+    // Dibuja una plataforma para la batería en el fondo marino
+    drawBatteryPlatform(seafloorY);
+}
+
+// Función para dibujar la plataforma donde se colocará la batería
+function drawBatteryPlatform(seafloorY) {
+    // Posición de la plataforma alineada con la batería
+    const platformX = battery.x - 20;
+    const platformWidth = battery.width + 40;
+    const platformHeight = 15;
+
+    // La plataforma debe estar ligeramente elevada del suelo marino
+    const platformY = seafloorY - platformHeight;
+
+    // Dibuja la estructura principal de la plataforma
+    ctx.fillStyle = "#8D6E63"; // Marrón más claro que el fondo marino
+    ctx.beginPath();
+    ctx.rect(platformX, platformY, platformWidth, platformHeight);
+    ctx.fill();
+
+    // Añade sombra para dar profundidad
+    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+    ctx.beginPath();
+    ctx.rect(platformX, platformY + platformHeight - 2, platformWidth, 2);
+    ctx.fill();
+
+    // Añade algunos detalles a la plataforma
+    ctx.strokeStyle = "#5D4037";
+    ctx.lineWidth = 1;
+
+    // Líneas horizontales para detalles
+    for (let i = 1; i < 3; i++) {
+        ctx.beginPath();
+        ctx.moveTo(platformX, platformY + i * (platformHeight / 3));
+        ctx.lineTo(platformX + platformWidth, platformY + i * (platformHeight / 3));
+        ctx.stroke();
+    }
+
+    // Borde superior más claro
+    ctx.strokeStyle = "#A1887F";
+    ctx.beginPath();
+    ctx.moveTo(platformX, platformY);
+    ctx.lineTo(platformX + platformWidth, platformY);
+    ctx.stroke();
+
+    // Pilares de soporte
+    ctx.fillStyle = "#6D4C41";
+    ctx.fillRect(platformX + 10, platformY + platformHeight, 8, seafloorY + 10 - (platformY + platformHeight));
+    ctx.fillRect(platformX + platformWidth - 18, platformY + platformHeight, 8, seafloorY + 10 - (platformY + platformHeight));
+}
+
+// Función para añadir detalles al fondo marino
+function drawSeafloorDetails(seafloorY) {
+    // Dibuja algunas rocas
+    for (let i = 0; i < 15; i++) {
+        const rockX = Math.random() * canvas.width;
+        const rockY = seafloorY + Math.random() * 20;
+        const rockSize = 10 + Math.random() * 20;
+
+        ctx.fillStyle = `rgba(80, 70, 60, ${0.7 + Math.random() * 0.3})`;
+        ctx.beginPath();
+        ctx.arc(rockX, rockY, rockSize, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Dibuja algunas plantas marinas (algas)
+    for (let i = 0; i < 8; i++) {
+        const plantX = 100 + Math.random() * (canvas.width - 200);
+        const plantY = seafloorY;
+        const plantHeight = 30 + Math.random() * 50;
+        const plantWidth = 5 + Math.random() * 10;
+
+        // Color verde oscuro para las algas
+        ctx.fillStyle = `rgba(0, ${100 + Math.random() * 55}, ${50 + Math.random() * 30}, 0.7)`;
+
+        // Dibujar alga ondulante
+        ctx.beginPath();
+        ctx.moveTo(plantX, plantY);
+
+        // Punto de control para curva
+        let controlX = plantX + plantWidth / 2 + Math.sin(time * 2) * 10;
+        let controlY = plantY - plantHeight / 2;
+
+        // Punto final
+        let endX = plantX + Math.sin(time) * 15;
+        let endY = plantY - plantHeight;
+
+        ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+        ctx.quadraticCurveTo(controlX + plantWidth, controlY, plantX + plantWidth, plantY);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // Añadir partículas suspendidas en el agua
+    for (let i = 0; i < 50; i++) {
+        const particleX = Math.random() * canvas.width;
+        const particleY = canvas.height / 2 + Math.random() * (seafloorY - canvas.height / 2);
+        const particleSize = 1 + Math.random() * 2;
+
+        // Movimiento lento de las partículas
+        const offsetX = Math.sin(time + i) * 2;
+        const offsetY = Math.cos(time * 0.5 + i) * 1;
+
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + Math.random() * 0.2})`;
+        ctx.beginPath();
+        ctx.arc(particleX + offsetX, particleY + offsetY, particleSize, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+
 
 // Función para dibujar nubes
 function drawClouds() {
@@ -240,7 +429,6 @@ function drawCoil() {
 }
 
 
-
 // Calcula la energía generada basada en el movimiento del flotador
 function generateEnergy() {
     // La velocidad es la diferencia absoluta entre la posición actual y la anterior
@@ -260,14 +448,12 @@ function generateEnergy() {
 
 
 // Dibuja la barra que muestra la cantidad de energía generada
-
-
 function drawEnergyBar() {
-    // Posición de la batería en el canvas
-    const batteryX = canvas.width - 140;
-    const batteryY = 340;
-    const batteryWidth = 100;
-    const batteryHeight = 30;
+    // Posición de la batería en el canvas (ahora es un objeto global)
+    const batteryX = battery.x;
+    const batteryY = battery.y;
+    const batteryWidth = battery.width;
+    const batteryHeight = battery.height;
     const tipWidth = 5;
     const tipHeight = 15;
 
@@ -284,6 +470,17 @@ function drawEnergyBar() {
 
     // Dibuja el terminal positivo (pequeño rectángulo en el extremo derecho)
     ctx.fillRect(batteryX + batteryWidth, batteryY + (batteryHeight - tipHeight) / 2, tipWidth, tipHeight);
+
+    // Dibuja el terminal negativo (pequeño rectángulo más corto en el lado izquierdo)
+    const negTermHeight = 10;
+    ctx.fillRect(batteryX - tipWidth, batteryY + (batteryHeight - negTermHeight) / 2, tipWidth, negTermHeight);
+
+    // Añade etiquetas + y - a los terminales
+    ctx.font = "bold 12px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("+", batteryX + batteryWidth + 2.5, batteryY + (batteryHeight / 2) + 4);
+    ctx.fillText("-", batteryX - 2.5, batteryY + (batteryHeight / 2) + 3);
 
     // Calcula el ancho del relleno en proporción a la energía actual
     const margin = 4; // Margen interior
@@ -314,9 +511,11 @@ function drawEnergyBar() {
 }
 
 
-
-
 function drawWires() {
+    // Determinar la altura del suelo marino
+    const waterLevel = canvas.height / 2;
+    const seafloorY = canvas.height - 50; // Ajusta este valor según el dibujo del fondo marino
+
     // Cable desde la bobina hasta la batería
     ctx.strokeStyle = "black";
     ctx.lineWidth = 5;
@@ -329,17 +528,38 @@ function drawWires() {
     const endX = canvas.width - 140;
     const endY = 370; // Posición Y de la batería
 
+    // Dibuja el cable principal
     ctx.beginPath();
     ctx.moveTo(startX, startY);
 
-    // Cable que baja al fondo del agua
-    ctx.lineTo(startX, canvas.height - 20);
+    // Cable que baja al fondo del mar
+    ctx.lineTo(startX, seafloorY - 10);
+
+    // Pequeña curva donde el cable toca el fondo (para mostrar que reposa)
+    ctx.bezierCurveTo(
+        startX, seafloorY,
+        startX + 20, seafloorY,
+        startX + 40, seafloorY
+    );
 
     // Cable que se arrastra por el fondo hasta debajo de la batería
-    ctx.lineTo(endX, canvas.height - 20);
+    // Con pequeñas ondulaciones para simular que sigue el contorno del fondo
+    const segments = 5;
+    const segmentWidth = (endX - (startX + 40)) / segments;
+
+    for (let i = 1; i <= segments; i++) {
+        const segX = startX + 40 + segmentWidth * i;
+        const segY = seafloorY + Math.sin(i * 0.8) * 5; // Pequeña ondulación
+        ctx.lineTo(segX, segY);
+    }
 
     // Cable que sube hasta la batería
-    ctx.lineTo(endX, endY);
+    ctx.bezierCurveTo(
+        endX, seafloorY,
+        endX, seafloorY - 40,
+        endX, endY
+    );
+
     ctx.stroke();
 
     // Si hay suficiente energía, muestra efecto de corriente
@@ -348,13 +568,30 @@ function drawWires() {
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 10]);
 
+        // Repite el mismo trazado para el efecto de energía
         ctx.beginPath();
         ctx.moveTo(startX, startY);
-        ctx.lineTo(startX, canvas.height - 20);
-        ctx.lineTo(endX, canvas.height - 20);
-        ctx.lineTo(endX, endY);
-        ctx.stroke();
+        ctx.lineTo(startX, seafloorY - 10);
 
+        ctx.bezierCurveTo(
+            startX, seafloorY,
+            startX + 20, seafloorY,
+            startX + 40, seafloorY
+        );
+
+        for (let i = 1; i <= segments; i++) {
+            const segX = startX + 40 + segmentWidth * i;
+            const segY = seafloorY + Math.sin(i * 0.8) * 5;
+            ctx.lineTo(segX, segY);
+        }
+
+        ctx.bezierCurveTo(
+            endX, seafloorY,
+            endX, seafloorY - 40,
+            endX, endY
+        );
+
+        ctx.stroke();
         ctx.setLineDash([]);
     }
 }
