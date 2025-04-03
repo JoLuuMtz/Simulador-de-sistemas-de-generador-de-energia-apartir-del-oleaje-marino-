@@ -86,7 +86,7 @@ function drawWave() {
     const waterLevel = canvas.height / 2;
 
     // Dibuja el fondo marino (suelo del mar)
-    
+
 
     // Crea un gradiente lineal vertical para el agua, colores más realistas
     let gradient = ctx.createLinearGradient(0, waterLevel - waveHeight, 0, canvas.height);
@@ -179,6 +179,141 @@ function drawClouds() {
 
 // Actualiza la posición del flotador para que siga el movimiento de las olas
 // Actualiza la posición del flotador para que siga las olas, ahora con forma de esfera
+// function updateFloater() {
+//     // Calcula la posición vertical objetivo basada en la forma de la ola
+//     let targetY = waveHeight * Math.sin((floater.x / waveLength) + time) + (canvas.height / 2);
+//     // Guarda la posición Y actual antes de actualizarla
+//     floater.prevY = floater.y;
+//     // Mueve el flotador gradualmente hacia la posición objetivo
+//     floater.y += (targetY - floater.y) * 0.1;
+//     // Actualiza la posición de la bobina para que siga al flotador
+//     coil.y = floater.y + 30;
+
+//     // Dibuja el flotador como una esfera realista
+//     const radius = floater.width / 2;
+
+//     // Dibuja la sombra para dar efecto de profundidad
+//     ctx.beginPath();
+//     ctx.arc(floater.x, floater.y, radius + 2, 0, Math.PI * 2);
+//     ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+//     ctx.fill();
+
+//     // Dibuja la esfera principal
+//     ctx.beginPath();
+//     ctx.arc(floater.x, floater.y, radius, 0, Math.PI * 2);
+
+//     // Crea un gradiente radial para dar efecto de volumen
+//     const gradient = ctx.createRadialGradient(
+//         floater.x - radius / 3, floater.y - radius / 3, radius / 10,
+//         floater.x, floater.y, radius
+//     );
+//     gradient.addColorStop(0, "#ff8080"); // Color más claro en el centro
+//     gradient.addColorStop(0.8, "#d9534f"); // Color principal
+//     gradient.addColorStop(1, "#b52b27"); // Color más oscuro en los bordes
+
+//     ctx.fillStyle = gradient;
+//     ctx.fill();
+
+//     // Añade un borde suave
+//     ctx.strokeStyle = "#b52b27";
+//     ctx.lineWidth = 1;
+//     ctx.stroke();
+
+//     // Añade un reflejo de luz para dar más realismo
+//     ctx.beginPath();
+//     ctx.arc(floater.x - radius / 2, floater.y - radius / 2, radius / 3, 0, Math.PI * 2);
+//     ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+//     ctx.fill();
+// }
+
+// function drawCoil() {
+//     // Dibuja el mecanismo fijo (base/imán)
+//     ctx.fillStyle = "#555555";
+//     ctx.beginPath();
+//     ctx.roundRect(coil.x - 15, coil.y + coil.height, 30, 20, 3);
+//     ctx.fill();
+//     ctx.strokeStyle = "#333333";
+//     ctx.lineWidth = 1;
+//     ctx.stroke();
+
+//     // Añade "patas" de soporte para mantenerlo fijo
+//     ctx.fillStyle = "#444444";
+//     ctx.fillRect(coil.x - 12, coil.y + coil.height + 20, 4, 250);
+//     ctx.fillRect(coil.x + 8, coil.y + coil.height + 20, 4,250);
+
+//     // Dibuja la bobina con aspecto más realista
+//     const coilGradient = ctx.createLinearGradient(
+//         coil.x - coil.width, coil.y,
+//         coil.x + coil.width, coil.y + coil.height
+//     );
+//     coilGradient.addColorStop(0, "#8B4513");  // Marrón claro
+//     coilGradient.addColorStop(0.5, "#A0522D"); // Marrón medio
+//     coilGradient.addColorStop(1, "#8B4513");   // Marrón claro
+
+//     ctx.fillStyle = coilGradient;
+//     ctx.fillRect(coil.x - coil.width / 2, coil.y, coil.width, coil.height);
+
+//     // Añade líneas de bobinado
+//     ctx.strokeStyle = "#704214";
+//     ctx.lineWidth = 1;
+//     for (let i = 2; i < coil.height; i += 3) {
+//         ctx.beginPath();
+//         ctx.moveTo(coil.x - coil.width / 2, coil.y + i);
+//         ctx.lineTo(coil.x + coil.width / 2, coil.y + i);
+//         ctx.stroke();
+//     }
+
+//     // Dibuja el objeto móvil (parte inferior del flotador/imán)
+//     ctx.fillStyle = "#7D7D7D";
+//     ctx.beginPath();
+//     ctx.roundRect(coil.x - 10, coil.y - 10, 20, 10, 2);
+//     ctx.fill();
+//     ctx.strokeStyle = "#555555";
+//     ctx.lineWidth = 1;
+//     ctx.stroke();
+
+//     // Si hay movimiento suficiente, muestra efecto de generación de electricidad
+//     let velocity = Math.abs(floater.y - floater.prevY);
+//     if (velocity > 0.2) {
+//         // Añade "chispas" eléctricas entre el objeto móvil y la bobina
+//         ctx.strokeStyle = "rgba(34, 34, 5, 0.8)";
+//         ctx.lineWidth = 0.5;
+//         for (let i = 0; i < Math.min(velocity * 10, 5); i++) {
+//             ctx.beginPath();
+//             ctx.moveTo(coil.x - 5 + Math.random() * 10, coil.y - 5);
+//             ctx.lineTo(coil.x - 5 + Math.random() * 10, coil.y + 5);
+//             ctx.stroke();
+//         }
+//     }
+// }
+
+
+// // Calcula la energía generada basada en el movimiento del flotador
+// function generateEnergy() {
+//     // La velocidad es la diferencia absoluta entre la posición actual y la anterior
+//     let velocity = Math.abs(floater.y - floater.prevY);
+//     // Factor que multiplica la generación de energía según la altura de las olas
+//     let waveFactor = waveHeight / 30;
+//     // Aumenta la energía basada en la velocidad y el factor de olas
+//     energy += velocity * waveFactor * 2;
+
+//     // Limita la energía al valor máximo establecido
+//     if (energy > maxEnergy) energy = maxEnergy;
+
+//     // Verifica si las olas están activas
+//     if (!isWaveActive) {
+//         // Si no hay oleaje, reduce la energía hasta llegar a 0
+//         energy -= 1;
+//         if (energy < 0) energy = 0;
+//     } else {
+//         // Si hay oleaje, comportamiento normal
+//         // Si hay suficiente energía, disminuye gradualmente (simulando consumo)
+//         if (energy > 10) energy -= 0.5;
+//         // Mantiene un mínimo de energía de 10 solo si hay oleaje
+//         if (energy < 10) energy = 10;
+//     }
+// }
+
 function updateFloater() {
     // Calcula la posición vertical objetivo basada en la forma de la ola
     let targetY = waveHeight * Math.sin((floater.x / waveLength) + time) + (canvas.height / 2);
@@ -226,9 +361,6 @@ function updateFloater() {
     ctx.fill();
 }
 
-
-
-
 function drawCoil() {
     // Dibuja el mecanismo fijo (base/imán)
     ctx.fillStyle = "#555555";
@@ -242,7 +374,7 @@ function drawCoil() {
     // Añade "patas" de soporte para mantenerlo fijo
     ctx.fillStyle = "#444444";
     ctx.fillRect(coil.x - 12, coil.y + coil.height + 20, 4, 250);
-    ctx.fillRect(coil.x + 8, coil.y + coil.height + 20, 4,250);
+    ctx.fillRect(coil.x + 8, coil.y + coil.height + 20, 4, 250);
 
     // Dibuja la bobina con aspecto más realista
     const coilGradient = ctx.createLinearGradient(
@@ -275,21 +407,70 @@ function drawCoil() {
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Si hay movimiento suficiente, muestra efecto de generación de electricidad
+    // Si hay movimiento suficiente, muestra efecto sutil de generación de electricidad
     let velocity = Math.abs(floater.y - floater.prevY);
     if (velocity > 0.2) {
-        // Añade "chispas" eléctricas entre el objeto móvil y la bobina
-        ctx.strokeStyle = "rgba(34, 34, 5, 0.8)";
-        ctx.lineWidth = 0.5;
-        for (let i = 0; i < Math.min(velocity * 10, 5); i++) {
+        // Calcula la intensidad de las chispas basada en la velocidad
+        const sparkIntensity = Math.min(0.8, velocity * 1.5);
+
+        // Determina la zona donde se producen las chispas (entre el imán y la bobina)
+        const sparkZoneY = coil.y - 2;
+        const sparkZoneWidth = 10;
+
+        // Dibuja un brillo sutil en la zona de contacto
+        ctx.fillStyle = `rgba(255, 230, 140, ${sparkIntensity * 0.3})`;
+        ctx.beginPath();
+        ctx.ellipse(coil.x, sparkZoneY, sparkZoneWidth, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Añade pequeñas chispas en la zona de contacto
+        ctx.strokeStyle = `rgba(255, 210, 50, ${sparkIntensity})`;
+        ctx.lineWidth = 0.7;
+
+        // Número de chispas proporcional a la velocidad pero limitado
+        const numSparks = Math.min(Math.floor(velocity * 5), 4);
+
+        for (let i = 0; i < numSparks; i++) {
+            // Posición inicial de la chispa
+            const sparkX = coil.x - 5 + Math.random() * 10;
+            const sparkY = sparkZoneY;
+
+            // Dibuja pequeñas líneas zigzagueantes hacia abajo (como en un generador real)
             ctx.beginPath();
-            ctx.moveTo(coil.x - 5 + Math.random() * 10, coil.y - 5);
-            ctx.lineTo(coil.x - 5 + Math.random() * 10, coil.y + 5);
+            ctx.moveTo(sparkX, sparkY);
+
+            // Crea un zigzag corto hacia abajo
+            let currentX = sparkX;
+            let currentY = sparkY;
+
+            // Solo 2-3 segmentos cortos para mantener el efecto sutil
+            const segments = 2 + Math.floor(Math.random() * 2);
+            const segmentLength = 2 + Math.random() * 2;
+
+            for (let j = 0; j < segments; j++) {
+                currentX += (Math.random() - 0.5) * 2;
+                currentY += segmentLength;
+                ctx.lineTo(currentX, currentY);
+            }
+
             ctx.stroke();
         }
+
+        // Añade un pequeño brillo en el punto de contacto
+        const glowRadius = 2 + velocity * 3;
+        const glowGradient = ctx.createRadialGradient(
+            coil.x, sparkZoneY, 0,
+            coil.x, sparkZoneY, glowRadius
+        );
+        glowGradient.addColorStop(0, `rgba(255, 255, 200, ${sparkIntensity})`);
+        glowGradient.addColorStop(1, 'rgba(255, 255, 200, 0)');
+
+        ctx.fillStyle = glowGradient;
+        ctx.beginPath();
+        ctx.arc(coil.x, sparkZoneY, glowRadius, 0, Math.PI * 2);
+        ctx.fill();
     }
 }
-
 
 // Calcula la energía generada basada en el movimiento del flotador
 function generateEnergy() {
@@ -302,7 +483,7 @@ function generateEnergy() {
 
     // Limita la energía al valor máximo establecido
     if (energy > maxEnergy) energy = maxEnergy;
-    
+
     // Verifica si las olas están activas
     if (!isWaveActive) {
         // Si no hay oleaje, reduce la energía hasta llegar a 0
@@ -315,18 +496,39 @@ function generateEnergy() {
         // Mantiene un mínimo de energía de 10 solo si hay oleaje
         if (energy < 10) energy = 10;
     }
+    displayEnergyInfo(velocity); // Muestra información de energía generada
 }
+
+// Función para mostrar información de energía generada (opcional)
+function displayEnergyInfo(velocity) {
+    ctx.fillStyle = "#333";
+    ctx.font = "12px Arial";
+
+    // Calcula el voltaje basado en la ley de Faraday (proporcional a la velocidad)
+    const voltage = velocity * 5;
+
+    ctx.fillText(`Voltaje inducido: ${voltage.toFixed(2)}V`, 100, 50);
+    ctx.fillText(`Energía acumulada: ${Math.floor(energy)}`, 100, 70);
+
+    // Visualiza la eficiencia del sistema
+    const efficiency = (velocity > 0.1) ? Math.min(90, 40 + velocity * 30) : 0;
+    ctx.fillText(`Eficiencia: ${Math.floor(efficiency)}%`, 100, 90);
+}
+
+
+
+
 
 
 // Dibuja la barra que muestra la cantidad de energía generada
 function drawEnergyBar() {
     // Posición de la batería en el canvas (ahora es un objeto global)
     const batteryX = battery.x; // posicion en x de la batería
-    const batteryY = battery.y +  30; // posicion Y de la batería
+    const batteryY = battery.y + 30; // posicion Y de la batería
     const batteryWidth = battery.width;
-    const batteryHeight = battery.height ;
+    const batteryHeight = battery.height;
     const tipWidth = 5;
-    const tipHeight =15;
+    const tipHeight = 15;
 
     // Dibuja el cuerpo principal de la batería (rectángulo con bordes redondeados)
     ctx.fillStyle = "#333"; // Color gris oscuro para el casco de la batería
@@ -387,93 +589,93 @@ function drawWires() {
     // Determinar la altura del suelo marino
     const waterLevel = canvas.height / 2;
     const seafloorY = canvas.height - 10; // Ajusta este valor según el dibujo del fondo marino
-    
+
     // Cable desde la bobina hasta la batería
     ctx.strokeStyle = "black";
     ctx.lineWidth = 6;
-    
+
     // Punto de inicio en la bobina
     const startX = coil.x;
     const startY = coil.y + coil.height + 20;
-    
+
     // Punto final en la batería
     const endX = canvas.width - 143;
     const endY = 400; // Posición Y de la batería
-    
+
     // Dibuja el cable principal
     ctx.beginPath();
     ctx.moveTo(startX, startY);
-    
+
     // Cable que baja al fondo del mar
     ctx.lineTo(startX, seafloorY - 10);
-    
+
     // Pequeña curva donde el cable toca el fondo (para mostrar que reposa)
     ctx.bezierCurveTo(
         startX, seafloorY,
         startX + 20, seafloorY,
         startX + 40, seafloorY
     );
-    
+
     // Cable que se arrastra por el fondo hasta debajo de la batería
     // Con pequeñas ondulaciones para simular que sigue el contorno del fondo
     const segments = 5;
     const segmentWidth = (endX - (startX + 40)) / segments;
-    
+
     for (let i = 1; i <= segments; i++) {
         const segX = startX + 40 + segmentWidth * i;
         const segY = seafloorY + Math.sin(i * 0.8) * 3; // Pequeña ondulación
         ctx.lineTo(segX, segY);
     }
-    
+
     // Cable que sube hasta la batería
     ctx.bezierCurveTo(
         endX, seafloorY,
         endX, seafloorY - 40,
         endX, endY
     );
-    
+
     ctx.stroke();
-    
+
     // Si hay suficiente energía, muestra efecto de corriente
     if (energy > 50) {
         // Animación de tiempo para el efecto de movimiento
         const currentTime = Date.now() * 0.002;
-        
+
         ctx.strokeStyle = `rgba(255, 255, 0, ${(energy / 100) * 0.5})`;
         ctx.lineWidth = 3;
-        
+
         // Efecto de dashed line moviéndose en una sola dirección (hacia la batería)
         const dashLength = 5;
         const gapLength = 15;
         const dashPeriod = dashLength + gapLength;
         const offset = -(currentTime % 1) * dashPeriod; // El signo negativo hace que se mueva hacia la derecha
-        
+
         ctx.setLineDash([dashLength, gapLength]);
         ctx.lineDashOffset = offset;
-        
+
         // Repite el mismo trazado para el efecto de energía
         ctx.beginPath();
         ctx.moveTo(startX, startY);
         ctx.lineTo(startX, seafloorY - 10);
-        
+
         ctx.bezierCurveTo(
             startX, seafloorY,
             startX + 20, seafloorY,
             startX + 40, seafloorY
         );
-        
+
         for (let i = 1; i <= segments; i++) {
             const segX = startX + 40 + segmentWidth * i;
             const segY = seafloorY + Math.sin(i * 0.8) * 3; // Usar la misma ondulación que el cable
             ctx.lineTo(segX, segY);
         }
-        
+
         ctx.bezierCurveTo(
             endX, seafloorY,
             endX, seafloorY - 40,
             endX, endY
         );
-        
+
         ctx.stroke();
         ctx.setLineDash([]);
     }
