@@ -214,45 +214,60 @@ function generateEnergy() {
 
 
 // Dibuja la barra que muestra la cantidad de energía generada
+
+
 function drawEnergyBar() {
-    // Posición de la barra en el canvas
-    const barX = canvas.width - 142;
-    const barY = 375;
-    // Dibuja el fondo gris de la barra
-    ctx.fillStyle = "black";
-    ctx.fillRect(barX, barY, 100, 15);
-
-    // Calcula el ancho de la parte amarilla en proporción a la energía actual
-    let animatedWidth = (energy / maxEnergy) * 100;
-    // Dibuja la parte de la barra que representa la energía actual
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(barX, barY, animatedWidth, 15);
-
-    // Agrega un borde negro a la barra de energía
+    // Posición de la batería en el canvas
+    const batteryX = canvas.width - 140;
+    const batteryY = 340;
+    const batteryWidth = 100;
+    const batteryHeight = 30;
+    const tipWidth = 5;
+    const tipHeight = 15;
+    
+    // Dibuja el cuerpo principal de la batería (rectángulo con bordes redondeados)
+    ctx.fillStyle = "#333"; // Color gris oscuro para el casco de la batería
     ctx.strokeStyle = "black";
-    ctx.strokeRect(barX, barY, 100, 15);
+    ctx.lineWidth = 2;
+    
+    // Dibuja el cuerpo principal de la batería
+    ctx.beginPath();
+    ctx.roundRect(batteryX, batteryY, batteryWidth, batteryHeight, 3);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Dibuja el terminal positivo (pequeño rectángulo en el extremo derecho)
+    ctx.fillRect(batteryX + batteryWidth, batteryY + (batteryHeight - tipHeight) / 2, tipWidth, tipHeight);
+    
+    // Calcula el ancho del relleno en proporción a la energía actual
+    const margin = 4; // Margen interior
+    const fillMaxWidth = batteryWidth - (margin * 2);
+    let fillWidth = (energy / maxEnergy) * fillMaxWidth;
+    
+    // Selecciona el color basado en el nivel de energía
+    let fillColor;
+    if (energy / maxEnergy < 0.2) {
+        fillColor = "#FF3333"; // Rojo cuando está casi vacía
+    } else if (energy / maxEnergy < 0.5) {
+        fillColor = "#FFCC33"; // Amarillo cuando está a media capacidad
+    } else {
+        fillColor = "#33CC33"; // Verde cuando está casi llena
+    }
+    
+    // Dibuja el relleno de la batería
+    ctx.fillStyle = fillColor;
+    ctx.fillRect(batteryX + margin, batteryY + margin, fillWidth, batteryHeight - (margin * 2));
+    
+    // Muestra el porcentaje de energía
+    const percentage = Math.floor((energy / maxEnergy) * 100);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 14px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(`${percentage}%`, batteryX + (batteryWidth / 2), batteryY + (batteryHeight / 2));
 }
 
 
-// Dibuja los cables que conectan el sistema
-// function drawWires() {
-//     // Establece el estilo de los cables
-//     ctx.strokeStyle = "black";
-//     ctx.lineWidth = 3;
-
-//     // Comienza a trazar el cable
-//     ctx.beginPath();
-//     // Inicia desde el flotador
-//     ctx.moveTo(floater.x, floater.y);
-//     // Baja verticalmente
-//     ctx.lineTo(floater.x, canvas.height - 50);
-//     // Luego horizontalmente hacia la derecha
-//     ctx.lineTo(canvas.width - 140, canvas.height - 50);
-//     // Y finalmente sube hasta la barra de energía
-//     ctx.lineTo(canvas.width - 140, 250);
-//     // Dibuja el trazo completo
-//     ctx.stroke();
-// }
 
 
 function drawWires() {
