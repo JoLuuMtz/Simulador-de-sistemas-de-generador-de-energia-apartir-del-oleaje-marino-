@@ -28,7 +28,21 @@ const coil = { x: floater.x, y: floater.y + 30, width: 10, height: 30 };
 // Mayor altura cuando el mouse está en la parte inferior de la pantalla
 canvas.addEventListener('mousemove', (event) => {
     waveHeight = Math.max(10, Math.min(60, event.clientY / 10));
+
 });
+
+const startWave = document.getElementById("startWave");
+const stopWave = document.getElementById("stopWave");
+
+// Evento para iniciar el olaje
+
+// Evento para detener el olaje
+
+
+// Modifica la función animate para almacenar el ID de la animación
+
+
+
 
 // Función para dibujar las olas animadas en el canvas
 function drawWave() {
@@ -64,6 +78,7 @@ function drawWave() {
     ctx.fillStyle = gradient;
     ctx.fill();
 }
+
 
 // Actualiza la posición del flotador para que siga el movimiento de las olas
 // Actualiza la posición del flotador para que siga las olas, ahora con forma de esfera
@@ -114,12 +129,71 @@ function updateFloater() {
     ctx.fill();
 }
 
-// Dibuja la bobina debajo del flotador
+
+
+
 function drawCoil() {
-    // Dibuja la bobina como un rectángulo marrón
-    ctx.fillStyle = "brown";
-    ctx.fillRect(coil.x - coil.width / 2, coil.y, coil.width, coil.height);
+    // Dibuja el mecanismo fijo (base/imán)
+    ctx.fillStyle = "#555555";
+    ctx.beginPath();
+    ctx.roundRect(coil.x - 15, coil.y + coil.height, 30, 20, 3);
+    ctx.fill();
+    ctx.strokeStyle = "#333333";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    // Añade "patas" de soporte para mantenerlo fijo
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(coil.x - 12, coil.y + coil.height + 20, 4, 30);
+    ctx.fillRect(coil.x + 8, coil.y + coil.height + 20, 4, 30);
+
+    // Dibuja la bobina con aspecto más realista
+    const coilGradient = ctx.createLinearGradient(
+        coil.x - coil.width, coil.y,
+        coil.x + coil.width, coil.y + coil.height
+    );
+    coilGradient.addColorStop(0, "#8B4513");  // Marrón claro
+    coilGradient.addColorStop(0.5, "#A0522D"); // Marrón medio
+    coilGradient.addColorStop(1, "#8B4513");   // Marrón claro
+    
+    ctx.fillStyle = coilGradient;
+    ctx.fillRect(coil.x - coil.width/2, coil.y, coil.width, coil.height);
+    
+    // Añade líneas de bobinado
+    ctx.strokeStyle = "#704214";
+    ctx.lineWidth = 1;
+    for (let i = 2; i < coil.height; i += 3) {
+        ctx.beginPath();
+        ctx.moveTo(coil.x - coil.width/2, coil.y + i);
+        ctx.lineTo(coil.x + coil.width/2, coil.y + i);
+        ctx.stroke();
+    }
+    
+    // Dibuja el objeto móvil (parte inferior del flotador/imán)
+    ctx.fillStyle = "#7D7D7D";
+    ctx.beginPath();
+    ctx.roundRect(coil.x - 10, coil.y - 10, 20, 10, 2);
+    ctx.fill();
+    ctx.strokeStyle = "#555555";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    // Si hay movimiento suficiente, muestra efecto de generación de electricidad
+    let velocity = Math.abs(floater.y - floater.prevY);
+    if (velocity > 0.2) {
+        // Añade "chispas" eléctricas entre el objeto móvil y la bobina
+        ctx.strokeStyle = "rgba(255, 255, 100, 0.8)";
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < Math.min(velocity * 10, 5); i++) {
+            ctx.beginPath();
+            ctx.moveTo(coil.x - 5 + Math.random() * 10, coil.y - 5);
+            ctx.lineTo(coil.x - 5 + Math.random() * 10, coil.y + 5);
+            ctx.stroke();
+        }
+    }
 }
+
+
 
 // Calcula la energía generada basada en el movimiento del flotador
 function generateEnergy() {
@@ -138,13 +212,14 @@ function generateEnergy() {
     if (energy < 10) energy = 10;
 }
 
+
 // Dibuja la barra que muestra la cantidad de energía generada
 function drawEnergyBar() {
     // Posición de la barra en el canvas
-    const barX = canvas.width - 140;
-    const barY = 250;
+    const barX = canvas.width - 142;
+    const barY = 375;
     // Dibuja el fondo gris de la barra
-    ctx.fillStyle = "gray";
+    ctx.fillStyle = "black";
     ctx.fillRect(barX, barY, 100, 15);
 
     // Calcula el ancho de la parte amarilla en proporción a la energía actual
@@ -158,48 +233,91 @@ function drawEnergyBar() {
     ctx.strokeRect(barX, barY, 100, 15);
 }
 
-// Dibuja los cables que conectan el sistema
-function drawWires() {
-    // Establece el estilo de los cables
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
 
-    // Comienza a trazar el cable
+// Dibuja los cables que conectan el sistema
+// function drawWires() {
+//     // Establece el estilo de los cables
+//     ctx.strokeStyle = "black";
+//     ctx.lineWidth = 3;
+
+//     // Comienza a trazar el cable
+//     ctx.beginPath();
+//     // Inicia desde el flotador
+//     ctx.moveTo(floater.x, floater.y);
+//     // Baja verticalmente
+//     ctx.lineTo(floater.x, canvas.height - 50);
+//     // Luego horizontalmente hacia la derecha
+//     ctx.lineTo(canvas.width - 140, canvas.height - 50);
+//     // Y finalmente sube hasta la barra de energía
+//     ctx.lineTo(canvas.width - 140, 250);
+//     // Dibuja el trazo completo
+//     ctx.stroke();
+// }
+
+
+function drawWires() {
+    // Dibuja los cables básicos
+    ctx.strokeStyle = "black"; // color de fondo 
+    ctx.lineWidth = 5;// achor de los cables
+    
     ctx.beginPath();
-    // Inicia desde el flotador
-    ctx.moveTo(floater.x, floater.y);
-    // Baja verticalmente
-    ctx.lineTo(floater.x, canvas.height - 50);
-    // Luego horizontalmente hacia la derecha
-    ctx.lineTo(canvas.width - 140, canvas.height - 50);
-    // Y finalmente sube hasta la barra de energía
+    ctx.moveTo(floater.x, floater.y + 75);
+    
+    // Cable con curva más natural
+    ctx.bezierCurveTo(
+        floater.x, canvas.height - 70,
+        canvas.width - 200, canvas.height - 15,
+        canvas.width - 140, canvas.height - 15
+    );
+    
     ctx.lineTo(canvas.width - 140, 250);
-    // Dibuja el trazo completo
     ctx.stroke();
+    
+    // Si hay suficiente energía, muestra efecto de corriente
+    if (energy > 50) {
+        ctx.strokeStyle = "rgba(255, 255, 0, " + (energy/100) * 0.5 + ")";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 10]);
+        
+        ctx.beginPath();
+        ctx.moveTo(floater.x, floater.y + 75);
+        
+        ctx.bezierCurveTo(
+            floater.x, canvas.height - 70,
+            canvas.width - 200, canvas.height - 15,
+            canvas.width - 140, canvas.height - 15
+        );
+        ctx.lineTo(canvas.width - 140, 250);
+        ctx.stroke();
+        
+        ctx.setLineDash([]);
+    }
 }
 
-// Dibuja la bombilla que se ilumina cuando hay suficiente energía
-// function drawLightBulb() {
-//     // Dibuja la parte principal de la bombilla como un círculo
-//     ctx.beginPath();
-//     ctx.arc(canvas.width - 100, 100, 20, 0, Math.PI * 2);
-//     // El color depende del nivel de energía: amarillo si está lleno, negro si no
-//     ctx.fillStyle = energy >= 99 ? "yellow" : "black";
-//     ctx.fill();
+// Efectos de iluminación ambiental cuando la bombilla está encendida
 
-//     // Si la energía está al máximo, añade un efecto de resplandor
-//     if (energy >= 99) {
-//         ctx.beginPath();
-//         ctx.arc(canvas.width - 100, 100, 30, 0, Math.PI * 2);
-//         ctx.fillStyle = "rgba(255, 255, 0, 0.5)";
-//         ctx.fill();
-//     }
+function drawAmbientLight() {
+    if (energy >= 99) {
+        // Crea un gradiente circular alrededor de la bombilla
+        const lightRadius = 200;
+        const gradient = ctx.createRadialGradient(
+            canvas.width - 100, 100, 10,
+            canvas.width - 100, 100, lightRadius
+        );
+        gradient.addColorStop(0, "rgba(241, 241, 0, 0.3)");
+        gradient.addColorStop(1, "rgba(255, 255, 150, 0)");
+        
+        // Aplica el gradiente sobre toda la escena
+        ctx.globalCompositeOperation = "lighter";
+        ctx.fillStyle = gradient;
+        ctx.fillRect(canvas.width - 100 - lightRadius, 100 - lightRadius, 
+                    lightRadius * 2, lightRadius * 2);
+        ctx.globalCompositeOperation = "source-over";
+    }
+}
 
-//     // Dibuja la base de la bombilla
-//     ctx.fillStyle = "black";
-//     ctx.strokeStyle = 'blue';
-//     ctx.fillRect(canvas.width - 105, 120, 10, 130);
-// }
+
+
 // Dibuja el bombillo con un aspecto más realista
 function drawLightBulb() {
     const bulbX = canvas.width - 100;
@@ -232,7 +350,7 @@ function drawLightBulb() {
     ctx.fill();
     
     // Conexión con los cables
-    ctx.fillRect(bulbX - 3, bulbY + bulbRadius + 30, 6, 90);
+    ctx.fillRect(bulbX - 3, bulbY + bulbRadius + 30, 6,224 );// base port del bombillo
     
     // Dibuja el vidrio de la bombilla
     ctx.beginPath();
@@ -312,6 +430,7 @@ function drawLightBulb() {
     }
 }
 
+
 // Función principal de animación que actualiza todo en cada cuadro
 function animate() {
     // Limpia todo el canvas para el nuevo cuadro
@@ -334,7 +453,8 @@ function animate() {
     time += waveSpeed;
     // Programa el siguiente cuadro de animación
     requestAnimationFrame(animate);
-}
+
+    }
 
 // Inicia el ciclo de animación
 animate();
