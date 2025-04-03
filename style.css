@@ -1,10 +1,10 @@
-
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
+
 h1 {
     color: #00217a;
 
@@ -22,13 +22,17 @@ footer p {
 }
 
 @keyframes bounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-10px);
     }
 }
+
 .btn-instruccion {
     background-color: #4CAF50;
     /* Green */
@@ -51,7 +55,8 @@ footer p {
 
 .btn-instruccion:hover {
     background-color: #45a049;
-    animation: none; /* Stop the bounce animation on hover */
+    animation: none;
+    /* Stop the bounce animation on hover */
 }
 
 canvas {
@@ -84,8 +89,10 @@ canvas {
 
 .container {
     display: flex;
-    flex: 1 1 auto; /* Allow the container to grow and shrink */
-    justify-content: space-between; /* Space between items */
+    flex: 1 1 auto;
+    /* Allow the container to grow and shrink */
+    justify-content: space-between;
+    /* Space between items */
 }
 
 
@@ -107,7 +114,7 @@ canvas {
     background-color: #7a0000;
 }
 
-.btn-explicacion{
+.btn-explicacion {
     background-color: #3a3a3a;
     /* Green */
     border: none;
@@ -120,11 +127,25 @@ canvas {
     margin: 4px 2px;
     margin-left: 20px;
     cursor: pointer;
-    border-radius:  12px;
+    border-radius: 12px;
     animation: bounce 0.5s infinite;
 }
 
 .btn-explicacion:hover {
     background-color: #7a7a7a;
-    animation: none; /* Stop the bounce animation on hover */
+    animation: none;
+    /* Stop the bounce animation on hover */
+}
+
+.repo {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: rgb(30, 0, 161);
+    text-decoration: none; 
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 12px;
+    margin : 10px;
+    
 }
