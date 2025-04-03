@@ -1,3 +1,8 @@
+
+
+
+
+
 // Obtiene una referencia al elemento canvas del HTML con id 'waveCanvas'
 const canvas = document.getElementById('waveCanvas');
 // Obtiene el contexto 2D del canvas, necesario para dibujar en él
@@ -26,6 +31,8 @@ const coil = { x: floater.x, y: floater.y + 30, width: 10, height: 30 };
 // Objeto que representa la batería
 const battery = { x: canvas.width - 140, y: 340, width: 100, height: 30 };
 
+let offset = 0; // Controla el desplazamiento de la corriente
+
 // Agrega un evento para cambiar la altura de las olas según la posición vertical del mouse
 // Mayor altura cuando el mouse está en la parte inferior de la pantalla
 
@@ -37,13 +44,12 @@ const battery = { x: canvas.width - 140, y: 340, width: 100, height: 30 };
 document.getElementById('stopWave').addEventListener('click', () => {
     isWaveActive = false;
 
-    if(isWaveActive === false) {
+    if (isWaveActive === false) {
         canvas.removeEventListener('mousemove', (event) => {
             waveHeight = Math.max(10, Math.min(60, event.clientY / 10));
         });
     }
     waveHeight = 0; // Detiene la ola visualmente
-
 
 
 });
@@ -53,12 +59,12 @@ document.getElementById('startWave').addEventListener('click', () => {
     isWaveActive = true;
 
     //
-    if (isWaveActive === true ) {
+    if (isWaveActive === true) {
         canvas.addEventListener('mousemove', (event) => {
             waveHeight = Math.max(10, Math.min(60, event.clientY / 10));
         });
-    } 
-    
+    }
+
     waveHeight = 30; // Restaura la intensidad predeterminada
 });
 
@@ -82,7 +88,7 @@ function drawWave() {
     const waterLevel = canvas.height / 2;
 
     // Dibuja el fondo marino (suelo del mar)
-    drawSeafloor(waterLevel);
+    
 
     // Crea un gradiente lineal vertical para el agua, colores más realistas
     let gradient = ctx.createLinearGradient(0, waterLevel - waveHeight, 0, canvas.height);
@@ -123,155 +129,13 @@ function drawWave() {
     ctx.fillStyle = gradient;
     ctx.fill();
 
-    
-}
 
-function drawSeafloor(waterLevel) {
-    // Crea un gradiente para el suelo marino
-    const seafloorGradient = ctx.createLinearGradient(0, waterLevel, 0, canvas.height);
-    seafloorGradient.addColorStop(0, "#5D4037"); // Marrón medio para la parte superior del suelo
-    seafloorGradient.addColorStop(1, "#3E2723"); // Marrón oscuro para la parte más profunda
-
-    // Altura del suelo marino (dejando espacio para el agua)
-    const seafloorHeight = canvas.height - waterLevel - 100;
-    const seafloorY = canvas.height - seafloorHeight;
-
-    // Dibuja el contorno base del fondo marino
-    ctx.beginPath();
-    ctx.moveTo(0, seafloorY);
-
-    // Crea un perfil irregular para el fondo
-    for (let x = 0; x < canvas.width; x += 20) {
-        // Usa una función sinusoidal con ruido para crear variaciones en la altura
-        const variation = 15 * Math.sin(x / 80) + Math.random() * 10 - 5;
-        ctx.lineTo(x, seafloorY + variation);
-    }
-
-    // Completa el camino hasta las esquinas inferiores
-    ctx.lineTo(canvas.width, canvas.height);
-    ctx.lineTo(0, canvas.height);
-    ctx.closePath();
-
-    // Rellena con el gradiente
-    ctx.fillStyle = seafloorGradient;
-    ctx.fill();
-
-    // Añade detalles al fondo marino (rocas, algas, etc.)
-    drawSeafloorDetails(seafloorY);
-
-    // Dibuja una plataforma para la batería en el fondo marino
-    drawBatteryPlatform(seafloorY);
-}
-
-// Función para dibujar la plataforma donde se colocará la batería
-function drawBatteryPlatform(seafloorY) {
-    // Posición de la plataforma alineada con la batería
-    const platformX = battery.x - 20;
-    const platformWidth = battery.width + 40;
-    const platformHeight = 15;
-
-    // La plataforma debe estar ligeramente elevada del suelo marino
-    const platformY = seafloorY - platformHeight;
-
-    // Dibuja la estructura principal de la plataforma
-    ctx.fillStyle = "#8D6E63"; // Marrón más claro que el fondo marino
-    ctx.beginPath();
-    ctx.rect(platformX, platformY, platformWidth, platformHeight);
-    ctx.fill();
-
-    // Añade sombra para dar profundidad
-    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
-    ctx.beginPath();
-    ctx.rect(platformX, platformY + platformHeight - 2, platformWidth, 2);
-    ctx.fill();
-
-    // Añade algunos detalles a la plataforma
-    ctx.strokeStyle = "#5D4037";
-    ctx.lineWidth = 1;
-
-    // Líneas horizontales para detalles
-    for (let i = 1; i < 3; i++) {
-        ctx.beginPath();
-        ctx.moveTo(platformX, platformY + i * (platformHeight / 3));
-        ctx.lineTo(platformX + platformWidth, platformY + i * (platformHeight / 3));
-        ctx.stroke();
-    }
-
-    // Borde superior más claro
-    ctx.strokeStyle = "#A1887F";
-    ctx.beginPath();
-    ctx.moveTo(platformX, platformY);
-    ctx.lineTo(platformX + platformWidth, platformY);
-    ctx.stroke();
-
-    // Pilares de soporte
-    ctx.fillStyle = "#6D4C41";
-    ctx.fillRect(platformX + 10, platformY + platformHeight, 8, seafloorY + 10 - (platformY + platformHeight));
-    ctx.fillRect(platformX + platformWidth - 18, platformY + platformHeight, 8, seafloorY + 10 - (platformY + platformHeight));
-}
-
-// Función para añadir detalles al fondo marino
-function drawSeafloorDetails(seafloorY) {
-    // Dibuja algunas rocas
-    for (let i = 0; i < 15; i++) {
-        const rockX = Math.random() * canvas.width;
-        const rockY = seafloorY + Math.random() * 20;
-        const rockSize = 10 + Math.random() * 20;
-
-        ctx.fillStyle = `rgba(80, 70, 60, ${0.7 + Math.random() * 0.3})`;
-        ctx.beginPath();
-        ctx.arc(rockX, rockY, rockSize, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    // Dibuja algunas plantas marinas (algas)
-    for (let i = 0; i < 8; i++) {
-        const plantX = 100 + Math.random() * (canvas.width - 200);
-        const plantY = seafloorY;
-        const plantHeight = 30 + Math.random() * 50;
-        const plantWidth = 5 + Math.random() * 10;
-
-        // Color verde oscuro para las algas
-        ctx.fillStyle = `rgba(0, ${100 + Math.random() * 55}, ${50 + Math.random() * 30}, 0.7)`;
-
-        // Dibujar alga ondulante
-        ctx.beginPath();
-        ctx.moveTo(plantX, plantY);
-
-        // Punto de control para curva
-        let controlX = plantX + plantWidth / 2 + Math.sin(time * 2) * 10;
-        let controlY = plantY - plantHeight / 2;
-
-        // Punto final
-        let endX = plantX + Math.sin(time) * 15;
-        let endY = plantY - plantHeight;
-
-        ctx.quadraticCurveTo(controlX, controlY, endX, endY);
-        ctx.quadraticCurveTo(controlX + plantWidth, controlY, plantX + plantWidth, plantY);
-        ctx.closePath();
-        ctx.fill();
-    }
-
-    // Añadir partículas suspendidas en el agua
-    for (let i = 0; i < 50; i++) {
-        const particleX = Math.random() * canvas.width;
-        const particleY = canvas.height / 2 + Math.random() * (seafloorY - canvas.height / 2);
-        const particleSize = 1 + Math.random() * 2;
-
-        // Movimiento lento de las partículas
-        const offsetX = Math.sin(time + i) * 2;
-        const offsetY = Math.cos(time * 0.5 + i) * 1;
-
-        ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + Math.random() * 0.2})`;
-        ctx.beginPath();
-        ctx.arc(particleX + offsetX, particleY + offsetY, particleSize, 0, Math.PI * 2);
-        ctx.fill();
-    }
 }
 
 
 
-// Función para dibujar nubes
+
+
 function drawClouds() {
     // Definir las nubes (posiciones fijas)
     const clouds = [
@@ -450,12 +314,12 @@ function generateEnergy() {
 // Dibuja la barra que muestra la cantidad de energía generada
 function drawEnergyBar() {
     // Posición de la batería en el canvas (ahora es un objeto global)
-    const batteryX = battery.x;
-    const batteryY = battery.y;
+    const batteryX = battery.x; // posicion en x de la batería
+    const batteryY = battery.y +  30; // posicion Y de la batería
     const batteryWidth = battery.width;
-    const batteryHeight = battery.height;
+    const batteryHeight = battery.height ;
     const tipWidth = 5;
-    const tipHeight = 15;
+    const tipHeight =15;
 
     // Dibuja el cuerpo principal de la batería (rectángulo con bordes redondeados)
     ctx.fillStyle = "#333"; // Color gris oscuro para el casco de la batería
@@ -464,7 +328,7 @@ function drawEnergyBar() {
 
     // Dibuja el cuerpo principal de la batería
     ctx.beginPath();
-    ctx.roundRect(batteryX, batteryY, batteryWidth, batteryHeight, 3);
+    ctx.roundRect(batteryX, batteryY, batteryWidth, batteryHeight, 5);
     ctx.fill();
     ctx.stroke();
 
@@ -479,8 +343,7 @@ function drawEnergyBar() {
     ctx.font = "bold 12px Arial";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
-    ctx.fillText("+", batteryX + batteryWidth + 2.5, batteryY + (batteryHeight / 2) + 4);
-    ctx.fillText("-", batteryX - 2.5, batteryY + (batteryHeight / 2) + 3);
+
 
     // Calcula el ancho del relleno en proporción a la energía actual
     const margin = 4; // Margen interior
@@ -514,19 +377,19 @@ function drawEnergyBar() {
 function drawWires() {
     // Determinar la altura del suelo marino
     const waterLevel = canvas.height / 2;
-    const seafloorY = canvas.height - 50; // Ajusta este valor según el dibujo del fondo marino
+    const seafloorY = canvas.height - 10; // Ajusta este valor según el dibujo del fondo marino
 
     // Cable desde la bobina hasta la batería
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 6;
 
     // Punto de inicio en la bobina
     const startX = coil.x;
-    const startY = coil.y + coil.height + 10;
+    const startY = coil.y + coil.height + 20;
 
     // Punto final en la batería
-    const endX = canvas.width - 140;
-    const endY = 370; // Posición Y de la batería
+    const endX = canvas.width - 143;
+    const endY = 400; // Posición Y de la batería
 
     // Dibuja el cable principal
     ctx.beginPath();
@@ -549,7 +412,7 @@ function drawWires() {
 
     for (let i = 1; i <= segments; i++) {
         const segX = startX + 40 + segmentWidth * i;
-        const segY = seafloorY + Math.sin(i * 0.8) * 5; // Pequeña ondulación
+        const segY = seafloorY + Math.sin(i * 0.8) * 3; // Pequeña ondulación
         ctx.lineTo(segX, segY);
     }
 
@@ -564,8 +427,9 @@ function drawWires() {
 
     // Si hay suficiente energía, muestra efecto de corriente
     if (energy > 50) {
+
         ctx.strokeStyle = `rgba(255, 255, 0, ${(energy / 100) * 0.5})`;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
         ctx.setLineDash([5, 10]);
 
         // Repite el mismo trazado para el efecto de energía
@@ -624,8 +488,6 @@ function drawAmbientLight() {
     }
 }
 
-
-
 // Dibuja el bombillo con un aspecto más realista
 function drawLightBulb() {
     const batteryX = canvas.width - 140;
@@ -662,7 +524,7 @@ function drawLightBulb() {
     ctx.fill();
 
     // Conexión directa con la batería (barra vertical)
-    ctx.fillRect(bulbX - 3, bulbY + bulbRadius + 30, 6, batteryY - (bulbY + bulbRadius + 30));
+    ctx.fillRect(bulbX - 3, bulbY + bulbRadius + 30, 6, batteryY - (bulbY + bulbRadius + 1));
 
     // Dibuja el vidrio de la bombilla
     ctx.beginPath();

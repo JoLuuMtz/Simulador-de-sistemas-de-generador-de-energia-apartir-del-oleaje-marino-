@@ -60,9 +60,8 @@ footer p {
 }
 
 canvas {
-    border-radius: 10%;
+    border-radius: 5%;
     border: 2px solid #4CAF50;
-    /* Green */
     margin: 20px auto;
     display: block;
 }
@@ -142,10 +141,38 @@ canvas {
     justify-content: center;
     text-align: center;
     color: rgb(30, 0, 161);
-    text-decoration: none; 
+    text-decoration: none;
     font-size: 16px;
     cursor: pointer;
     border-radius: 12px;
-    margin : 10px;
-    
+    margin: 10px;
+
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-instruccion,
+    .btn-explicacion,
+    .btn-start,
+    .btn-stop {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .btn-instruccion {
+        margin-left: 0;
+    }
+
+    canvas {
+        width: 100%;
+        height: auto;
+    }
+
+
+
 }
