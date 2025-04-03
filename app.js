@@ -147,7 +147,7 @@
 // Selecciona el elemento canvas donde se dibujará la simulación.
 const canvas = document.getElementById('waveCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
+canvas.width = window.innerWidth; // Ajusta el ancho del canvas al ancho de la ventana
 canvas.height = 400;
 
 // Variable de tiempo usada para animar las olas
