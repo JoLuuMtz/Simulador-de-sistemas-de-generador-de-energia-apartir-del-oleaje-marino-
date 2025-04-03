@@ -1,8 +1,5 @@
 
 
-
-
-
 // Obtiene una referencia al elemento canvas del HTML con id 'waveCanvas'
 const canvas = document.getElementById('waveCanvas');
 // Obtiene el contexto 2D del canvas, necesario para dibujar en él
@@ -33,6 +30,7 @@ const battery = { x: canvas.width - 140, y: 340, width: 100, height: 30 };
 
 let offset = 0; // Controla el desplazamiento de la corriente
 
+let isWaveActive = true; // Controla si el olaje está activo o no
 // Agrega un evento para cambiar la altura de las olas según la posición vertical del mouse
 // Mayor altura cuando el mouse está en la parte inferior de la pantalla
 
@@ -243,8 +241,8 @@ function drawCoil() {
 
     // Añade "patas" de soporte para mantenerlo fijo
     ctx.fillStyle = "#444444";
-    ctx.fillRect(coil.x - 12, coil.y + coil.height + 20, 4, 30);
-    ctx.fillRect(coil.x + 8, coil.y + coil.height + 20, 4, 30);
+    ctx.fillRect(coil.x - 12, coil.y + coil.height + 20, 4, 250);
+    ctx.fillRect(coil.x + 8, coil.y + coil.height + 20, 4,250);
 
     // Dibuja la bobina con aspecto más realista
     const coilGradient = ctx.createLinearGradient(
@@ -281,7 +279,7 @@ function drawCoil() {
     let velocity = Math.abs(floater.y - floater.prevY);
     if (velocity > 0.2) {
         // Añade "chispas" eléctricas entre el objeto móvil y la bobina
-        ctx.strokeStyle = "rgba(255, 255, 100, 0.8)";
+        ctx.strokeStyle = "rgba(34, 34, 5, 0.8)";
         ctx.lineWidth = 0.5;
         for (let i = 0; i < Math.min(velocity * 10, 5); i++) {
             ctx.beginPath();
@@ -304,10 +302,19 @@ function generateEnergy() {
 
     // Limita la energía al valor máximo establecido
     if (energy > maxEnergy) energy = maxEnergy;
-    // Si hay suficiente energía, disminuye gradualmente (simulando consumo)
-    if (energy > 10) energy -= 0.5;
-    // Mantiene un mínimo de energía de 10
-    if (energy < 10) energy = 10;
+    
+    // Verifica si las olas están activas
+    if (!isWaveActive) {
+        // Si no hay oleaje, reduce la energía hasta llegar a 0
+        energy -= 1;
+        if (energy < 0) energy = 0;
+    } else {
+        // Si hay oleaje, comportamiento normal
+        // Si hay suficiente energía, disminuye gradualmente (simulando consumo)
+        if (energy > 10) energy -= 0.5;
+        // Mantiene un mínimo de energía de 10 solo si hay oleaje
+        if (energy < 10) energy = 10;
+    }
 }
 
 
