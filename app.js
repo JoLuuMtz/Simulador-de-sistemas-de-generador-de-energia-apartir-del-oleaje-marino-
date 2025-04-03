@@ -374,93 +374,104 @@ function drawEnergyBar() {
 }
 
 
+
+
 function drawWires() {
     // Determinar la altura del suelo marino
     const waterLevel = canvas.height / 2;
     const seafloorY = canvas.height - 10; // Ajusta este valor según el dibujo del fondo marino
-
+    
     // Cable desde la bobina hasta la batería
     ctx.strokeStyle = "black";
     ctx.lineWidth = 6;
-
+    
     // Punto de inicio en la bobina
     const startX = coil.x;
     const startY = coil.y + coil.height + 20;
-
+    
     // Punto final en la batería
     const endX = canvas.width - 143;
     const endY = 400; // Posición Y de la batería
-
+    
     // Dibuja el cable principal
     ctx.beginPath();
     ctx.moveTo(startX, startY);
-
+    
     // Cable que baja al fondo del mar
     ctx.lineTo(startX, seafloorY - 10);
-
+    
     // Pequeña curva donde el cable toca el fondo (para mostrar que reposa)
     ctx.bezierCurveTo(
         startX, seafloorY,
         startX + 20, seafloorY,
         startX + 40, seafloorY
     );
-
+    
     // Cable que se arrastra por el fondo hasta debajo de la batería
     // Con pequeñas ondulaciones para simular que sigue el contorno del fondo
     const segments = 5;
     const segmentWidth = (endX - (startX + 40)) / segments;
-
+    
     for (let i = 1; i <= segments; i++) {
         const segX = startX + 40 + segmentWidth * i;
         const segY = seafloorY + Math.sin(i * 0.8) * 3; // Pequeña ondulación
         ctx.lineTo(segX, segY);
     }
-
+    
     // Cable que sube hasta la batería
     ctx.bezierCurveTo(
         endX, seafloorY,
         endX, seafloorY - 40,
         endX, endY
     );
-
+    
     ctx.stroke();
-
+    
     // Si hay suficiente energía, muestra efecto de corriente
     if (energy > 50) {
-
+        // Animación de tiempo para el efecto de movimiento
+        const currentTime = Date.now() * 0.002;
+        
         ctx.strokeStyle = `rgba(255, 255, 0, ${(energy / 100) * 0.5})`;
         ctx.lineWidth = 3;
-        ctx.setLineDash([5, 10]);
-
+        
+        // Efecto de dashed line moviéndose en una sola dirección (hacia la batería)
+        const dashLength = 5;
+        const gapLength = 15;
+        const dashPeriod = dashLength + gapLength;
+        const offset = -(currentTime % 1) * dashPeriod; // El signo negativo hace que se mueva hacia la derecha
+        
+        ctx.setLineDash([dashLength, gapLength]);
+        ctx.lineDashOffset = offset;
+        
         // Repite el mismo trazado para el efecto de energía
         ctx.beginPath();
         ctx.moveTo(startX, startY);
         ctx.lineTo(startX, seafloorY - 10);
-
+        
         ctx.bezierCurveTo(
             startX, seafloorY,
             startX + 20, seafloorY,
             startX + 40, seafloorY
         );
-
+        
         for (let i = 1; i <= segments; i++) {
             const segX = startX + 40 + segmentWidth * i;
-            const segY = seafloorY + Math.sin(i * 0.8) * 5;
+            const segY = seafloorY + Math.sin(i * 0.8) * 3; // Usar la misma ondulación que el cable
             ctx.lineTo(segX, segY);
         }
-
+        
         ctx.bezierCurveTo(
             endX, seafloorY,
             endX, seafloorY - 40,
             endX, endY
         );
-
+        
         ctx.stroke();
         ctx.setLineDash([]);
     }
 }
 
-// Efectos de iluminación ambiental cuando la bombilla está encendida
 
 function drawAmbientLight() {
     // Si la energía es suficiente, añade luz ambiental
