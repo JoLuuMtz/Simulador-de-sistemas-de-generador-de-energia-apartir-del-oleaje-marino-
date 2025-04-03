@@ -13,28 +13,74 @@
         <h1>
             Sistema de Generador de energia en base al Oleaje marino
         </h1>
-        <button id="myButton" class="btn-instruccion"> Intrucciones de uso   </button>
+
+
+        <div class="container">
+
+            <button
+                id="myButton"
+                class="btn-instruccion"
+            >
+                Instrucciones de Uso 
+            </button>
+        
+
+
+
+            <div class="container-Button">
+                <button
+                    class="btn-start"
+                    id="startWave"
+                >
+
+                    Iniciar simulación ▶
+                </button>
+                <button
+                    class="btn-stop"
+                    id="stopWave"
+                >
+                    Detener simulación ⬜
+                </button>
+            </div>
+
+
+
+
+
+        </div>
+
 
 
 
         <canvas id="waveCanvas"></canvas>
 
 
+
+
         <footer>
-            
-            
+
+
+
+
+
             <p>
-                Desarrollado por Jorge Martinez Ricardo - 2025
-            </p>
+                Desarrollado por <strong>Jorge Martinez Ricardo - 2025</strong> 
+            </p> 
             <p>
                 Este proyecto es una demostración de un generador de energía basado en el oleaje marino.
             </p>
-            
-            
+
+
+
+
+
         </footer>
         <script src="app.js"></script>
         <script src="InteractiveUser.js"></script>
-        
+
+
+
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
 </html>

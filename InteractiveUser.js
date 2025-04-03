@@ -11,6 +11,11 @@ intruccion.addEventListener("click", function () {
         icon: 'success',
         confirmButtonText: '¡Entendido!'
     });
+
+    intruccion.style.animation = 'none';
+
 });
+
+
 
 

@@ -1,6 +1,6 @@
 h1 {
-    color: #4CAF50;
-    /* Green */
+    color: #00217a;
+
     text-align: center;
     font-size: 2.5em;
     margin-top: 20px;
@@ -9,11 +9,19 @@ h1 {
 }
 
 footer p {
-    color: gray;
+    color: rgb(48, 48, 48);
     font-size: 0.8em;
     text-align: center;
 }
 
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
 .btn-instruccion {
     background-color: #4CAF50;
     /* Green */
@@ -27,6 +35,7 @@ footer p {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 12px;
+    animation: bounce 0.5s infinite;
 
 
 
@@ -34,8 +43,7 @@ footer p {
 
 .btn-instruccion:hover {
     background-color: #45a049;
-
-
+    animation: none; /* Stop the bounce animation on hover */
 }
 
 canvas {
@@ -44,4 +52,49 @@ canvas {
     /* Green */
     margin: 20px auto;
     display: block;
+}
+
+.btn-start {
+    background-color: #804cce;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+
+}
+
+.btn-start:hover {
+    background-color: #250036;
+}
+
+.container {
+    display: flex;
+    flex: 1 1 auto; /* Allow the container to grow and shrink */
+    justify-content: space-between; /* Space between items */
+}
+
+
+.btn-stop {
+    background-color: #dd0000;
+    border: none;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.btn-stop:hover {
+    background-color: #7a0000;
 }
