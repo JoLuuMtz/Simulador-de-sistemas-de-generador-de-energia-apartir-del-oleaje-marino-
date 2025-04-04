@@ -472,6 +472,7 @@ function drawCoil() {
     }
 }
 
+
 // Calcula la energía generada basada en el movimiento del flotador
 function generateEnergy() {
     // La velocidad es la diferencia absoluta entre la posición actual y la anterior
@@ -514,9 +515,6 @@ function displayEnergyInfo(velocity) {
     const efficiency = (velocity > 0.1) ? Math.min(90, 40 + velocity * 30) : 0;
     ctx.fillText(`Eficiencia: ${Math.floor(efficiency)}%`, 100, 90);
 }
-
-
-
 
 
 
