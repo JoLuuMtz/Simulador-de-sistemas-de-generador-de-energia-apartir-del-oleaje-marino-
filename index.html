@@ -16,7 +16,11 @@
             Sistema de Generador de energia en base al Oleaje marino
         </h1>
 
+
+
         <div class="container">
+
+
 
             <button
                 id="btn-intructions"
@@ -25,12 +29,16 @@
                 Instrucciones de Uso  ✍
             </button>
 
+
+
             <button
                 id="btn-explication"
                 class="btn-explicacion"
             >
                 Explicacion Cientifica de la simulacion ☝
             </button>
+
+
 
 
 
@@ -60,7 +68,11 @@
 
 
 
+
+
         </div>
+
+
 
 
 
@@ -71,13 +83,20 @@
         <canvas id="waveCanvas"></canvas>
 
 
+        <h3>Ilustraccion dentro de la bobina </h3>
+
+        <canvas  class="faradayCanvas" id="faradayCanvas" width="400" height="300" ></canvas>
+
+
 
 
 
 
 
         <footer>
-          
+
+
+
 
 
             <p>
@@ -90,9 +109,25 @@
 
 
 
+
+
         </footer>
-        <script src="js/app.js"></script>
-        <script src="js/InteractiveUser.js"></script>
+        <script
+            type="module"
+            src="js/app.js"
+        ></script>
+        <script
+            type="module"
+            src="js/bobina.js"
+        >
+        </script>
+        <script
+            type="module"
+            src="js/InteractiveUser.js"
+        ></script>
+
+
+
 
 
 

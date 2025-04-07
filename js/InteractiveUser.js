@@ -30,10 +30,25 @@ explication.addEventListener("click", () => {
     Swal.fire({
         title: 'Explicación del juego',
         text: `
-        Aqui va la explicacion de lo que pasa
+            La Ley de Faraday explica que una corriente eléctrica puede generarse cuando un
+                campo magnético cambia alrededor de una bobina de alambre. 
+                En el caso de la energía undimotriz, el movimiento de las
+                olas del mar hace que un imán se mueva dentro o cerca de
+                una bobina. Este movimiento cambia el campo magnético que
+                atraviesa la bobina, lo que provoca que se genere electricidad.
+                Es así como la energía del movimiento de las olas se transforma
+                en energía eléctrica aprovechando principios del electromagnetismo.
+
+                en este caso el flotador es el que se mueve por la fuerza de las olas y el almacenador 
+                es la bobina que genera la electricidad. La energía cinética generada por el oleaje 
+                se transmite al flotador, que a su vez la transporta hacia el almacenador en el fondo del mar.
+                Dependiendo de la intensidad del oleaje, el almacenador se llenará o se vaciará.
+                
+
             `,
         icon: 'info',
-        confirmButtonText: '¡Ok!'
+        confirmButtonText: '¡Ok!',
+        
     });
 
     explication.style.animation = 'none';
