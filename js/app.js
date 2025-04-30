@@ -132,8 +132,6 @@ function drawWave() {
 
 
 
-
-
 function drawClouds() {
     // Definir las nubes (posiciones fijas)
     const clouds = [
@@ -175,10 +173,6 @@ function drawClouds() {
         drawCloud(adjustedX, cloud.y, cloud.size);
     });
 }
-
-
-
-
 
 
 
@@ -369,20 +363,36 @@ function generateEnergy() {
 }
 
 // Función para mostrar información de energía generada (opcional)
-function displayEnergyInfo(velocity) {
-    ctx.fillStyle = "#333";
-    ctx.font = "12px Arial";
 
-    // Calcula el voltaje basado en la ley de Faraday (proporcional a la velocidad)
+
+function displayEnergyInfo(velocity) {
+
+    ctx.fillStyle = "#333";
+    ctx.font = "bold 14px Arial";
+
+    // Calcula el voltaje basado en la ley de Faraday
     const voltage = velocity * 5;
 
-    ctx.fillText(`Voltaje inducido: ${voltage.toFixed(2)}V`, 100, 50);
-    ctx.fillText(`Energía acumulada: ${Math.floor(energy)}`, 100, 70);
+    // Suposición: corriente proporcional a la velocidad
+    const current = velocity * 2; // en amperios (A)
 
-    // Visualiza la eficiencia del sistema
+    // Cálculo de potencia en vatios
+    const power = voltage * current;
+
+    // Mostrar voltaje
+    ctx.fillText(`Voltaje inducido: ${voltage.toFixed(2)} V`, 114, 50);
+
+    // Mostrar potencia
+    ctx.fillText(`Potencia generada: ${power.toFixed(2)} W`, 130, 70);
+
+    // Mostrar energía acumulada
+    ctx.fillText(`Energía acumulada: ${Math.floor(energy)}`, 115, 90);
+
+    // Mostrar eficiencia
     const efficiency = (velocity > 0.1) ? Math.min(90, 40 + velocity * 30) : 0;
-    ctx.fillText(`Eficiencia: ${Math.floor(efficiency)}%`, 100, 90);
+    ctx.fillText(`Eficiencia: ${Math.floor(efficiency)}%`, 90, 110);
 }
+
 
 
 
