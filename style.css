@@ -6,7 +6,7 @@
 
 }
 
-h3{
+h3 {
     text-align: center;
 }
 
@@ -37,6 +37,14 @@ footer p {
     text-align: center;
 }
 
+.container {
+    display: flex;
+    flex: 1 1 auto;
+    /* Allow the container to grow and shrink */
+    justify-content: space-between;
+    /* Space between items */
+}
+
 @keyframes bounce {
 
     0%,
@@ -65,8 +73,6 @@ footer p {
     border-radius: 12px;
     animation: bounce 0.5s infinite;
 
-
-
 }
 
 .btn-instruccion:hover {
@@ -74,6 +80,7 @@ footer p {
     animation: none;
     /* Stop the bounce animation on hover */
 }
+
 
 canvas {
 
@@ -84,6 +91,7 @@ canvas {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
 }
+
 .control-container {
     background-color: white;
     border-radius: 8px;
@@ -138,74 +146,135 @@ input[type="range"]::-moz-range-thumb {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.btn-start {
-    background-color: #804cce;
+/* Variables para estilos del simulador marino */
+:root {
+    --ocean-blue: #1a6b96;
+    --ocean-blue-dark: #0c4863;
+    --ocean-green: #0a9396;
+    --ocean-green-dark: #00696b;
+    --coral-red: #e63946;
+    --coral-red-dark: #9e2a33;
+    --light-cyan: #a8dadc;
+    --sand-color: #f1faee;
+    --deep-sea: #023047;
+    --white: #ffffff;
+}
+
+.container-Button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Estilos comunes para todos los botones */
+.btn-start,
+.btn-stop,
+.btn-explicacion {
     border: none;
-    color: white;
-    padding: 15px 32px;
+    color: var(--white);
+    padding: 12px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    font-weight: 600;
+    margin: 6px 4px;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 8px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
 
+/* Botón de inicio con estilo oceánico */
+.btn-start {
+    background: linear-gradient(to bottom, var(--ocean-green), var(--ocean-green-dark));
+    border-bottom: 3px solid var(--ocean-green-dark);
 }
 
 .btn-start:hover {
-    background-color: #250036;
+    background: linear-gradient(to bottom, var(--ocean-green-dark), var(--ocean-green));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
 }
 
-.container {
-    display: flex;
-    flex: 1 1 auto;
-    /* Allow the container to grow and shrink */
-    justify-content: space-between;
-    /* Space between items */
+.btn-start:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* Botón de parada con estilo coral */
 .btn-stop {
-    background-color: #dd0000;
-    border: none;
-    color: white;
-    padding: 15px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
+    background: linear-gradient(to bottom, var(--coral-red), var(--coral-red-dark));
+    border-bottom: 3px solid var(--coral-red-dark);
 }
 
 .btn-stop:hover {
-    background-color: #7a0000;
+    background: linear-gradient(to bottom, var(--coral-red-dark), var(--coral-red));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
 }
 
+.btn-stop:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Botón de explicación con estilo profundo marino */
 .btn-explicacion {
-    background-color: #3a3a3a;
-    /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    background: linear-gradient(to bottom, var(--deep-sea), #012135);
+    border-bottom: 3px solid #011525;
+    position: relative;
+    overflow: hidden;
     margin-left: 20px;
-    cursor: pointer;
-    border-radius: 12px;
-    animation: bounce 0.5s infinite;
 }
 
 .btn-explicacion:hover {
-    background-color: #7a7a7a;
-    animation: none;
-    /* Stop the bounce animation on hover */
+    background: linear-gradient(to bottom, #012135, var(--deep-sea));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
 }
 
+.btn-explicacion:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Efecto de onda para botón explicación */
+.btn-explicacion::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 300%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    animation: wave 3s linear infinite;
+}
+
+@keyframes wave {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* Iconos para botones (opcional, se pueden agregar a HTML) */
+.btn-start::before,
+.btn-stop::before,
+.btn-explicacion::before {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 16px;
+}
 
 /* Responsive */
 @media screen and (max-width: 600px) {
@@ -218,8 +287,10 @@ input[type="range"]::-moz-range-thumb {
     .btn-explicacion,
     .btn-start,
     .btn-stop {
+        padding: 10px 18px;
+        font-size: 14px;
         width: 100%;
-        margin: 10px 0;
+        margin: 5px 0;
     }
 
     .btn-instruccion {
