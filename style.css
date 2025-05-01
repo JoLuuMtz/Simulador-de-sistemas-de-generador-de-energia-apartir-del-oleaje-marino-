@@ -40,9 +40,10 @@ footer p {
 .container {
     display: flex;
     flex: 1 1 auto;
-    /* Allow the container to grow and shrink */
+    flex-direction: row;
     justify-content: space-between;
-    /* Space between items */
+    align-items: center;
+
 }
 
 @keyframes bounce {
@@ -97,6 +98,8 @@ canvas {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 51, 102, 0.1);
     padding: 25px;
+    margin-left: 100px;
+    margin-right: 100px;
     width: 100%;
     max-width: 400px;
 }
@@ -291,6 +294,10 @@ input[type="range"]::-moz-range-thumb {
         font-size: 14px;
         width: 100%;
         margin: 5px 0;
+    }
+    .container-Button{
+        flex-direction: column;
+        align-items: center;
     }
 
     .btn-instruccion {

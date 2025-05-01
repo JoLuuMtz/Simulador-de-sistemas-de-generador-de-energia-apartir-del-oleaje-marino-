@@ -12,7 +12,7 @@ canvas.height = 400;
 // Variable que almacena el tiempo para la animación de las olas
 let time = 0;
 // Nivel inicial de energía, con un valor mínimo de 10
-let energy = 10;
+let energy = 0;
 // Valor máximo que puede alcanzar la energía
 const maxEnergy = 100;
 // Altura de las olas, afecta a la apariencia visual y a la generación de energía
@@ -30,7 +30,7 @@ const battery = { x: canvas.width - 140, y: 340, width: 100, height: 30 };
 
 let offset = 0; // Controla el desplazamiento de la corriente
 
-let isWaveActive = true; // Controla si el olaje está activo o no
+let isWaveActive = false; // Controla si el olaje está activo o no
 // Agrega un evento para cambiar la altura de las olas según la posición vertical del mouse
 // Mayor altura cuando el mouse está en la parte inferior de la pantalla
 
@@ -65,7 +65,7 @@ document.getElementById('startWave').addEventListener('click', () => {
         });
     }
     
-    waveHeight = 10; // Restaura la intensidad predeterminada
+    waveHeight = 0; // Restaura la intensidad predeterminada
     amplitudeInput.value = waveHeight; // sincroniza el slide con el oleaje
 
 });
