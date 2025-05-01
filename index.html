@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <link rel="shortcut icon" href="https://static.vecteezy.com/system/resources/thumbnails/031/425/354/small_2x/crashing-water-waves-illustration-ai-generative-png.png" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
     </head>
     <body>
         <h1>
@@ -56,16 +57,69 @@
 
 
             <div class="control-container">
-                <label class="aumentoDisminucion">
-                    <span class="titulo-control">CONTROL DE OLEAJE</span>
-                    <input
-                        type="range"
-                        id="amplitudeInput"
-                        min="0"
-                        max="60"
-                        value="10"
-                    >
-                </label>
+                <div class="active-indicator"></div>
+    <label class="aumentoDisminucion">
+        <span class="titulo-control">CONTROL DE OLEAJE</span>
+        <div class="slider-container">
+            <input
+                type="range"
+                id="amplitudeInput"
+                min="0"
+                max="100"
+                value="10"
+            >
+            <div class="value-display">10</div>
+            <!-- <div class="range-marks">
+                <div class="mark major"><div class="mark-label">0</div></div>
+                <div class="mark"></div>
+                <div class="mark major"><div class="mark-label">25</div></div>
+                <div class="mark"></div>
+                <div class="mark major"><div class="mark-label">50</div></div>
+                <div class="mark"></div>
+                <div class="mark major"><div class="mark-label">100</div></div>
+            </div> -->
+        </div>
+        <div class="level-meter">
+            <div class="level-indicator"></div>
+        </div>
+        <div class="indicator-labels">
+            <div class="indicator-label">CALMADO</div>
+            <div class="indicator-label">FUERTE</div>
+        </div>
+    </label>
+</div>
+
+<!-- Script para la funcionalidad del control -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const amplitudeInput = document.getElementById('amplitudeInput');
+    const valueDisplay = document.querySelector('.value-display');
+    const levelIndicator = document.querySelector('.level-indicator');
+    
+    // Actualizar visualización cuando cambia el valor
+    function updateDisplay() {
+        const value = amplitudeInput.value;
+        const percentage = (value / amplitudeInput.max) * 100;
+        
+        valueDisplay.textContent = value;
+        levelIndicator.style.width = percentage + '%';
+        
+        // Cambiar colores según intensidad
+        if (percentage > 70) {
+            levelIndicator.style.background = 'linear-gradient(to right, #ff5e00, #ff0000)';
+        } else if (percentage > 40) {
+            levelIndicator.style.background = 'linear-gradient(to right, #ffaa00, #ff5e00)';
+        } else {
+            levelIndicator.style.background = 'linear-gradient(to right, #00a8e8, #00e4ff)';
+        }
+    }
+    
+    // Inicializar y configurar eventos
+    updateDisplay();
+    amplitudeInput.addEventListener('input', updateDisplay);
+    amplitudeInput.addEventListener('change', updateDisplay);
+});
+</script>
             </div>
 
 
