@@ -36,7 +36,6 @@ let isWaveActive = true; // Controla si el olaje está activo o no
 
 
 
-
 // Evento para iniciar el olaje
 // Botón para detener las olas
 document.getElementById('stopWave').addEventListener('click', () => {
@@ -49,21 +48,26 @@ document.getElementById('stopWave').addEventListener('click', () => {
     }
     waveHeight = 0; // Detiene la ola visualmente
 
-
 });
 
 // Botón para reanudar las olas
 document.getElementById('startWave').addEventListener('click', () => {
+
     isWaveActive = true;
 
-    //
     if (isWaveActive === true) {
-        canvas.addEventListener('mousemove', (event) => {
-            waveHeight = Math.max(10, Math.min(60, event.clientY / 10));
+        // variable que obteiene el valor de la altura de la ola
+        const amplitudeInput = document.getElementById('amplitudeInput');
+        // Aquí reemplazamos la funcionalidad del movimiento del mouse con el input range
+        amplitudeInput.addEventListener('input', () => {
+            // Actualizamos waveHeight con el valor del slider
+            waveHeight = parseInt(amplitudeInput.value);
         });
     }
+    
+    waveHeight = 10; // Restaura la intensidad predeterminada
+    amplitudeInput.value = waveHeight; // sincroniza el slide con el oleaje
 
-    waveHeight = 30; // Restaura la intensidad predeterminada
 });
 
 

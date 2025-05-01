@@ -13,44 +13,32 @@
     </head>
     <body>
         <h1>
-        
             SISTEMA GENERADOR DE ENERGÍA A BASE DEL OLEAJE MARINO EN LA CIUDAD DE CARTAGENA.
         </h1>
 
 
-
         <div class="container">
 
-
-
-            <button
-                id="btn-intructions"
-                class="btn-instruccion"
-            >
-                Instrucciones de Uso  ✍
-            </button>
-
-            <INPUT
-                type="range"
-                id="amplitudeInput"
-                placeholder="Amplitud de la ola (m)">
-                    
-
+            <div class="control-container">
+                <label class="aumentoDisminucion">
+                    <span class="titulo-control">Disminución y aumento del oleaje</span>
+                    <input
+                        type="range"
+                        id="amplitudeInput"
+                        min="10"
+                        max="60" 
+                        value="0"
+                    >
+                </label>
+            </div>
+    
 
             <button
                 id="btn-explication"
                 class="btn-explicacion"
             >
-                Explicacion Cientifica de la simulacion ☝
+            Explicación científica de la simulación☝
             </button>
-
-
-
-
-
-
-
-
 
             <div class="container-Button">
                 <button
@@ -76,7 +64,13 @@
 
 
 
+
+
+
         </div>
+
+
+
 
 
 
@@ -89,9 +83,23 @@
         <canvas id="waveCanvas"></canvas>
 
 
-        <h3> Ilustracion dentro de la bobina </h3>
 
-        <canvas  class="faradayCanvas" id="faradayCanvas" width="400" height="300" ></canvas>
+
+
+        <h3>Ilustracion dentro de la bobina</h3>
+
+
+
+
+        <canvas
+            class="faradayCanvas"
+            id="faradayCanvas"
+            width="400"
+            height="300"
+        ></canvas>
+
+
+
 
 
 
@@ -105,6 +113,9 @@
 
 
 
+
+
+
             <p>
                 Desarrollado por
                 <strong>Jorge Martinez Ricardo - 2025 ©</strong>
@@ -112,6 +123,9 @@
             <p>
                 Este proyecto es una demostración / simulacion de un generador de energía basado en el oleaje marino.
             </p>
+
+
+
 
 
 
@@ -131,6 +145,9 @@
             type="module"
             src="js/InteractiveUser.js"
         ></script>
+
+
+
 
 
 
